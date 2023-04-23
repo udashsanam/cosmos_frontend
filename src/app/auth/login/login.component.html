@@ -1,0 +1,56 @@
+<div class="login-form-wrapper-container">
+    <div class="login-form-wrapper">
+
+        <div class="row logo-wrapper text-center">
+            <img src="./assets/img/online-astro-logo.png">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center sign-in-text">
+                <h2>Cosmos</h2>
+                <span class="greet_text">Please sign in to continue!</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ngx-spinner [fullScreen]="true" bdOpacity="1" bdColor="none" size="medium" color="#47419c"
+                    type="ball-beat">
+                </ngx-spinner>
+            </div>
+        </div>
+
+
+        <form class="form-signin" #f="ngForm" (ngSubmit)="signIn(f.value, $event)">
+
+            <div class="form-group" class="invalid" [hidden]="!this.invalidLogin">
+                <small class="form-control">
+                    <span *ngIf="this.invalidMessage == '401'">Invalid username/ password</span>
+                    <span *ngIf="this.invalidMessage == '423'">Your account is locked. Please verify your email!</span>
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Email address</label>
+                <input type="email" id="inputEmail" name="email" ngModel class="form-control" placeholder="example@gmail.com"
+                    required autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" id="inputPassword" name="password" ngModel class="form-control"
+                    placeholder="pass123" required />
+            </div>
+
+            <div class="form-group text-center">
+                <a href="javascript:;" (click)="forgotPassword(f.value)" id="forgot-password">Forgot Password?</a>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit">Log in</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>

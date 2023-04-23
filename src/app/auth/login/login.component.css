@@ -1,0 +1,122 @@
+.login-form-wrapper-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: #111111;
+    align-items: center;
+    padding: 15px;
+    min-height: 100vh;
+    width: 100%;
+    animation: pulse 5s infinite;
+    background: linear-gradient(45deg, rgb(133, 28, 39) 0%, rgb(133, 28, 39) 1%, rgb(191, 40, 36) 1%, rgb(191, 40, 36) 15%, rgb(76, 15, 42) 15%, rgb(76, 15, 42) 38%, rgb(162, 34, 38) 38%, rgb(162, 34, 38) 55%, rgb(220, 46, 35) 55%, rgb(220, 46, 35) 62%, rgb(105, 21, 41) 62%, rgb(105, 21, 41) 63%, rgb(47, 9, 44) 63%, rgb(47, 9, 44) 69%, rgb(18, 3, 45) 69%, rgb(18, 3, 45) 100%);
+    transition: opacity 200ms linear;
+}
+
+.login-form-wrapper {
+    color: #111111;
+    /* background: #111111; */
+    background: #ffffff;
+    /* border: 1px solid whitesmoke; */
+    border-radius: .25rem;
+    width: 390px;
+    padding: 2em;
+    background: #ffffffd1;
+    box-shadow: 0px 0px 26px 0px rgb(19, 14, 45);
+}
+
+.logo-wrapper img {
+    max-width: 109px;
+    margin: 0 auto;
+    max-height: 109px;    
+}
+
+.logo-wrapper h1 {
+    margin: 0 auto;
+    color: #ea9e24;
+}
+
+.sign-in-text p {
+    color: #afabab;
+    margin-bottom: 0;
+}
+
+.sign-in-text h2 {
+    margin-top: 0;
+    font-weight: 900;
+    color: #524b7f;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.form-signin {
+    background: #ebdee5;
+    padding: 6%;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    color: #3a3a3a;
+}
+
+input {
+    overflow: hidden;
+    font-size: 16px;
+    color: #555555;
+    line-height: 1.2;
+    display: block;
+    width: 100%;
+    height: 45px;
+    background: #e8f0fe;
+    padding: 0 5px;
+    box-shadow: none;
+}
+
+.form-control {
+    border-radius: 4px;
+}
+
+a#forgot-password {
+    color: #7a1f00; 
+    font-size: 0.92em;
+    font-weight: 400;
+}
+
+a#forgot-password:hover {
+    color: #fc6d58; 
+}
+
+button {
+    background: #565187;
+    background: linear-gradient(to bottom, #75719f 0%, #565187 100%);
+    color: white;
+    font-size:small;
+    padding: 1em 3em;
+    font-weight: bolder;
+    border: 1px solid #565187;
+    cursor: pointer;
+    border-radius: .25rem;
+}
+
+button:hover {
+    background: #565187e6;
+    color: #ffffff;
+}
+
+button:disabled {
+    background: #ccc;
+    color: #140e2d;
+    font-size: smaller;
+    padding: 1em 3em;
+    font-weight: bolder;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+    border-radius: .25rem;
+}
+
+.greet_text{
+       text-transform: capitalize;
+}
