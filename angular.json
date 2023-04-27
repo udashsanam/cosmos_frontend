@@ -124,5 +124,8 @@
             }
         }
     },
-    "defaultProject": "online-astro-ui"
+    "defaultProject": "online-astro-ui",
+    "cli": {
+      "analytics": false
+    }
 }

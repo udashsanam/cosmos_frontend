@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ChangePasswordModel } from "./change-password/change-password.model";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { retry, catchError } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -15,10 +14,11 @@ export class AccountService {
   constructor(private httpClient: HttpClient) {}
 
   changePassword(changePasswordModel: ChangePasswordModel): Observable<any> {
-    return this.httpClient
-      .post<ChangePasswordModel>(this.MODERATORS, changePasswordModel);
+    return this.httpClient.post<ChangePasswordModel>(
+      this.MODERATORS,
+      changePasswordModel
+    );
   }
-
 }
 
 export interface ErrorModel {
