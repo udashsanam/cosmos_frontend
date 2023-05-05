@@ -5,7 +5,8 @@
 export const environment = {
   production: true,
   // baseUrl: 'https://cosmos-api.azurewebsites.net/api'
-  baseUrl: 'https://system.cosmosastrology.com/api'
+  baseUrl: "https://system.cosmosastrology.com/api",
+  webSocketUrl: "http://139.144.169.177:8282/api",
   // baseUrl: 'http://193.37.152.233:8080/api'
   // baseUrl: 'http://192.168.1.99:8082/api'
   // baseUrl: 'http://cosmos.southeastasia.cloudapp.azure.com:8080/api'

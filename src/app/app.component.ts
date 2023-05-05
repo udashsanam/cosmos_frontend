@@ -1,17 +1,10 @@
-import { Component, OnInit } from "@angular/core";
-import * as Stomp from "stompjs";
+import { MatDialogModule } from "@angular/material/dialog";
+import { Component } from "@angular/core";
 import { AuthenticationService } from "./auth/authentication.service";
-import { WebSocketSubject } from "rxjs/webSocket";
 
-import {
-  Router,
-  NavigationEnd,
-  NavigationStart,
-  RouterOutlet,
-} from "@angular/router";
-import { AppService } from "./app.service";
+import { Router, NavigationEnd, NavigationStart } from "@angular/router";
 import { hammerjs } from "node_modules/hammerjs";
-import { WebSocketService } from "./wesocket.service";
+import { WebSocketService } from "./websocket.service";
 
 @Component({
   selector: "app-root",
@@ -19,9 +12,11 @@ import { WebSocketService } from "./wesocket.service";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
+  isSHow = false;
   title = "EventusEventRegistrationV1-frontend";
   hammerjs = hammerjs;
   userRole;
+  message: any;
 
   _authService: AuthenticationService;
   // selectNavbar = 0;
@@ -37,11 +32,13 @@ export class AppComponent {
   constructor(
     private authService: AuthenticationService,
     private _router: Router, // private _appService: AppService,
-    private _websocketService: WebSocketService
+    private _websocketService: WebSocketService,
+    private _modalService: MatDialogModule
   ) {
     this._authService = authService;
     this.loading = true;
-    // this.func();
+
+    _websocketService.connect(" " + authService.getToken());
   }
 
   ngOnInit() {
@@ -51,14 +48,13 @@ export class AppComponent {
       } else if (event instanceof NavigationEnd) {
         this.loading = false;
         // this.selectNavbarFunc();
+        this.subscribeMessage();
       }
     });
 
     if (this._authService.getToken() !== null) {
       this.userRole = this._authService.currentUser.auth;
     }
-
-    this.anotherWebSocket();
   }
 
   // selectNavbarFunc() {
@@ -74,124 +70,76 @@ export class AppComponent {
   //       this.selectNavbar = 1;
   //   }
   // }
-  sendMsg() {}
 
-  func() {
-    if ("WebSocket" in window) {
-      // add token to a rquest when connect with WebSocket
+  private subscribeMessage() {
+    this._websocketService.subscribe("/user/topic/video/chat", (msg: any) => {
+      let m = JSON.parse(msg.body);
+      console.log(m);
+      this.message = m;
+      this.isSHow = true;
 
-      const ws = new WebSocket("ws://139.144.169.177:8282/socket");
+      this.playSound();
+    });
+  }
 
-      var stompClient = Stomp.over(ws);
-      // connect with token
+  end() {
+    this.isSHow = !this.isSHow;
+  }
 
-      ws.addEventListener("open", (event) => {
-        console.log("Socket connection established");
-      });
+  playSound() {
+    let audio = new Audio();
+    audio.src = "../assets/sounds.wav";
+    audio.load();
+    this.isSHow ? audio.play() : audio.pause();
+  }
 
-      stompClient.connect(
-        {
-          token: "token: " + this._authService.getToken(),
+  sendSignal() {
+    this.isSHow = !this.isSHow;
+    this._websocketService
+      .sendPrivateMessage({
+        data: this.message.data,
+        receiver: this.message.sender,
+      })
+      .subscribe(
+        (res) => {
+          this._router.navigate(["/video/", this.guid()]);
+          // open new tab outside
+
+          window.open(
+            "http://localhost:4200/video/" +
+              this.guid() +
+              "?token=" +
+              this._authService.getToken()
+          );
         },
-        function (frame) {
-          console.log("Connected: " + frame);
-        },
-        (error) => {
-          console.log(error);
+        (err) => {
+          console.log(err);
+          if (err.error.text === "successfully send") {
+            this._router.navigate(["/video/", this.guid()]);
+          }
         }
       );
-
-      ws.onerror = (x) => {
-        //console.log("Socket error", x);
-        console.log("Socket error", x);
-      };
-
-      ws.onopen = (x) => {
-        //console.log("Socket connection established");
-        console.log("Socket connection established", x);
-      };
-
-      ws.onmessage = (message) => {
-        //console.log("New Message received ", message.data);
-        const msg = JSON.parse(message.data);
-      };
-
-      ws.onclose = () => {
-        //console.log("Socket connection closed");
-      };
-    } else {
-      // The browser doesn't support WebSocket
-      alert("WebSocket NOT supported by your Browser!");
-    }
   }
 
-  newWebSocket() {
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb3Ntb3Nhc3Ryb2xvZ3kuMTEyQGdtYWlsLmNvbSIsImRpc3BsYXlOYW1lIjoiQ29zbW9zIEFzdHJvbG9neSIsImFwcFVzZXJJZCI6MSwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzOTk0MjV9.uxVHWLUC-rmSfk3rMAKAJnMEjMBu59JGygh4ZtC_xKg";
-
-    const webSocket = new WebSocketSubject({
-      url: "ws://139.144.169.177:8282/socket",
-      protocol: token,
-    });
-
-    webSocket.next("message to send");
-
-    webSocket.subscribe((msg) => {
-      console.log("message received: " + msg);
-    });
+  guid() {
+    return (
+      this.s4() +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      "-" +
+      this.s4() +
+      this.s4() +
+      this.s4()
+    );
   }
-
-  anotherWebSocket() {
-    const webSocketUrl = "ws://139.144.169.177:8282/socket";
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjb3Ntb3Nhc3Ryb2xvZ3kuMTEyQGdtYWlsLmNvbSIsImRpc3BsYXlOYW1lIjoiQ29zbW9zIEFzdHJvbG9neSIsImFwcFVzZXJJZCI6MSwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzOTk0MjV9.uxVHWLUC-rmSfk3rMAKAJnMEjMBu59JGygh4ZtC_xKg";
-
-    const webSocket = new WebSocket(webSocketUrl, ["token", token]);
-
-    webSocket.onopen = (event) => {
-      console.log("WebSocket connection established.");
-    };
-
-    webSocket.onmessage = (event) => {
-      console.log("Received message:", event.data);
-    };
-
-    webSocket.onclose = (event) => {
-      console.log("WebSocket connection closed:", event);
-    };
-
-    webSocket.onerror = (event) => {
-      console.error("WebSocket occured error:", event);
-    };
-  }
-
-  anotherNewWebSocket() {
-    const url = "ws://139.144.169.177:8282/socket";
-    const token = "05f22fd30883f5e5";
-
-    const socket = new WebSocket(url);
-    socket.addEventListener("open", function (event) {
-      console.log("WebSocket connection established!");
-      socket.send(
-        JSON.stringify({
-          headers: {
-            token: token,
-          },
-          data: "Hello server!",
-        })
-      );
-    });
-
-    socket.addEventListener("message", function (event) {
-      console.log("Message from server:", event.data);
-    });
-
-    socket.addEventListener("error", function (event) {
-      console.error("WebSocket error:", event);
-    });
-
-    socket.addEventListener("close", function (event) {
-      console.log("WebSocket connection closed:", event);
-    });
+  s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
   }
 }
