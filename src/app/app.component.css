@@ -1,0 +1,10 @@
+.chat-container {
+  box-shadow: 0px 1px 2px 0px #130a0a54;
+  width: 20%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+  margin-top: 200px;
+  border-radius: 5px;
+}
